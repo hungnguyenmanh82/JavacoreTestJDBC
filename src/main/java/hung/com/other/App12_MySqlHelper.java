@@ -1,11 +1,11 @@
-package hung.com.testJDBC;
+package hung.com.other;
 
 import java.sql.*;
 
 /*
  * Tạo template để truy cập dữ liệu DAO
  * */
-public class MySqlHelper {
+public class App12_MySqlHelper {
 
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 	private static final String DB_URL = "jdbc:mysql://localhost"; 
@@ -15,7 +15,7 @@ public class MySqlHelper {
 	
 	private Statement statement = null;
 
-	MySqlHelper(String databaseName){
+	public App12_MySqlHelper(String databaseName){
 		Connection connection = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

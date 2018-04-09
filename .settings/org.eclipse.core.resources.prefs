@@ -1,4 +1,10 @@
 eclipse.preferences.version=1
-encoding//src/main/java/hung/com/testJDBC/DatabaseCreation.java=UTF-8
-encoding//src/main/java/hung/com/testJDBC/MySqlHelper.java=UTF-8
-encoding//src/main/java/hung/com/testJDBC/TestJDBC.java=UTF-8
+encoding//src/main/java/hung/com/other/App10_JDBC.java=UTF-8
+encoding//src/main/java/hung/com/other/App11_SqlCommand.java=UTF-8
+encoding//src/main/java/hung/com/other/App12_MySqlHelper.java=UTF-8
+encoding//src/main/java/hung/com/testJDBC/App1_CreateDatabase.java=UTF-8
+encoding//src/main/java/hung/com/testJDBC/App2_CreateTable.java=UTF-8
+encoding//src/main/java/hung/com/testJDBC/App3_InsertRecord.java=UTF-8
+encoding//src/main/java/hung/com/testJDBC/App4_SelectRecords.java=UTF-8
+encoding//src/main/java/hung/com/testJDBC/App5_UpdateRecords.java=UTF-8
+encoding//src/main/java/hung/com/testJDBC/App6_DeleteRecords.java=UTF-8

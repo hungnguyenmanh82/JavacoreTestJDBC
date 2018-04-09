@@ -1,8 +1,8 @@
-package hung.com.testJDBC;
+package hung.com.other;
 
 import java.sql.*;
 
-public class TestJDBC {
+public class App10_JDBC {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 

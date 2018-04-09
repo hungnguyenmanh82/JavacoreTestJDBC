@@ -1,4 +1,4 @@
-package hung.com.testJDBC;
+package hung.com.other;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,7 @@ import com.mysql.jdbc.DatabaseMetaData;
  * each functions can run independently.
  * This example get from Tutorialspoint.
  */
-public class DatabaseCreation {
+public class App11_SqlCommand {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 	static final String DB_URL = "jdbc:mysql://localhost"; 
 	static final String USER = "root"; //root
