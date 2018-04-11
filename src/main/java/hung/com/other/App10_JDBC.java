@@ -6,6 +6,7 @@ public class App10_JDBC {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
+	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	// EMP là tên database => xem mục tạo Database 
 	//localhost: là địa chỉ nội bộ
 	static final String DB_URL = "jdbc:mysql://localhost/EMP"; //Tomcat và Mysql on the same computer
@@ -20,7 +21,7 @@ public class App10_JDBC {
 		Connection conn = null;
 		Statement stmt = null;
 		try{
-			//STEP 2: Register JDBC driver (MySql, Oracle, MS sql….)
+			//STEP 2: Register JDBC driver (MySql, Oracle, MS sql….) to class loader
 			Class.forName("com.mysql.jdbc.Driver"); //JDBC kết nối với MySQL connector J api
 
 			//STEP 3: Open a connection
