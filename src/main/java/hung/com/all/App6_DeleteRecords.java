@@ -1,8 +1,8 @@
-package hung.com.testJDBC;
+package hung.com.all;
 
 import java.sql.*;
 
-public class App5_UpdateRecords {
+public class App6_DeleteRecords {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -17,7 +17,7 @@ public class App5_UpdateRecords {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		updateRecords();
+		deleteRecords();
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class App5_UpdateRecords {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void updateRecords(){
+	private static void deleteRecords(){
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
@@ -39,13 +39,13 @@ public class App5_UpdateRecords {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
 			stmt = conn.createStatement();
 			
-			String sql = "UPDATE Registration " +
-					"SET age = 30 WHERE id in (100, 101)";
+			String sql = "DELETE FROM Registration " +
+									"WHERE id = 101";
 			int numberRowUpdate = stmt.executeUpdate(sql);
 			
 			System.out.println(sql);
 			System.out.println("numberRowUpdate = "+ numberRowUpdate);	
-			
+
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();

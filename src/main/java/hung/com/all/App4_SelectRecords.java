@@ -1,8 +1,8 @@
-package hung.com.testJDBC;
+package hung.com.all;
 
 import java.sql.*;
 
-public class App6_DeleteRecords {
+public class App4_SelectRecords {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -17,11 +17,11 @@ public class App6_DeleteRecords {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		deleteRecords();
+		selectRecords();
 	}
 	
 	/**
-	 * Template to update Records to a Table
+	 * Template to select Records to a Table
 
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
@@ -30,7 +30,8 @@ public class App6_DeleteRecords {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void deleteRecords(){
+	private static void selectRecords(){
+
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
@@ -38,14 +39,25 @@ public class App6_DeleteRecords {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
 			stmt = conn.createStatement();
-			
-			String sql = "DELETE FROM Registration " +
-									"WHERE id = 101";
-			int numberRowUpdate = stmt.executeUpdate(sql);
-			
-			System.out.println(sql);
-			System.out.println("numberRowUpdate = "+ numberRowUpdate);	
 
+			String sql = "SELECT id, first, last, age FROM Registration";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			//STEP 5: Extract data from result set
+			while(rs.next()){
+				//Retrieve by column name
+				int id  = rs.getInt("id");
+				int age = rs.getInt("age");
+				String first = rs.getString("first");
+				String last = rs.getString("last");
+
+				//Display values
+				System.out.print("ID: " + id);
+				System.out.print(", Age: " + age);
+				System.out.print(", First: " + first);
+				System.out.println(", Last: " + last);
+			}
+			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();

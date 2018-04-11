@@ -1,8 +1,8 @@
-package hung.com.testJDBC;
+package hung.com.testperformance;
 
 import java.sql.*;
 
-public class App3_InsertRecord {
+public class App6_DeleteAllRecords {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -17,11 +17,11 @@ public class App3_InsertRecord {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		insertRecords();
+		deleteRecords();
 	}
 	
 	/**
-	 * Template to insertRecords to a Table:
+	 * Template to update Records to a Table
 
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
@@ -30,33 +30,20 @@ public class App3_InsertRecord {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-
-	private static void insertRecords(){
+	private static void deleteRecords(){
 		Connection conn = null;
 		Statement stmt = null;
-
-		String databaseName = "testcreatedb";
+		String databaseName = "login";
 		try{
-			Class.forName(JDBC_DRIVER);
-			conn = DriverManager.getConnection(DB_URL+ databaseName, USER, PASS);
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
 			stmt = conn.createStatement();
-
-			String sql = "INSERT INTO Registration " +
-					"VALUES (100, 'Zara', 'Ali', 18)";
-			stmt.executeUpdate(sql);
 			
-			sql = "INSERT INTO Registration " +
-					"VALUES (101, 'Mahnaz', 'Fatma', 25)";
-			stmt.executeUpdate(sql);
+			String sql = "DELETE FROM login";
+			int numberRowUpdate = stmt.executeUpdate(sql);
 			
-			sql = "INSERT INTO Registration " +
-					"VALUES (102, 'Zaid', 'Khan', 30)";
-			stmt.executeUpdate(sql);
-			
-			sql = "INSERT INTO Registration " +
-					"VALUES(103, 'Sumit', 'Mittal', 28)";
-			stmt.executeUpdate(sql);
-			System.out.println("Inserted records into the table...");
+			System.out.println(sql);
+			System.out.println("number of row was deleted: numberRowUpdate = "+ numberRowUpdate);	
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
@@ -80,6 +67,5 @@ public class App3_InsertRecord {
 		}//end try
 		System.out.println("Goodbye!");
 	}
-
 
 }

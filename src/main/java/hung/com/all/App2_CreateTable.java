@@ -1,4 +1,4 @@
-package hung.com.testJDBC;
+package hung.com.all;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.sql.Statement;
 import com.mysql.jdbc.DatabaseMetaData;
 
 /**
- * Phần này thường làm trên SQL workbench. Nên ko cần thiết
+ * Phần này thư�?ng làm trên SQL workbench. Nên ko cần thiết
 // EMP là tên database ko cần quote => nếu có quote sẽ báo lỗi
  sql> CREATE DATABASE IF NOT EXISTS EMP;
  
