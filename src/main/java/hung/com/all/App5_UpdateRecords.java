@@ -8,6 +8,7 @@ public class App5_UpdateRecords {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 	// EMP là tên database => xem mục tạo Database 
 	//localhost: là địa chỉ nội bộ
+	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	static final String DB_URL = "jdbc:mysql://localhost/"; //Tomcat và Mysql on the same computer
 	// jdbc:mysql://192.168.15.25:3306/yourdatabase
 	//Make sure there is no firewall blocking the access to port 3306
@@ -35,8 +36,9 @@ public class App5_UpdateRecords {
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
+			String sqlOption = "?autoReconnect=true&useSSL=false";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
 			String sql = "UPDATE Registration " +

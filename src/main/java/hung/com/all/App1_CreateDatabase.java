@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Phần này thư�?ng làm trên SQL workbench. Nên ko cần thiết
+ * Phần này thư�?ng làm trên SQL workbench. Nên ko cần thiết
 // EMP là tên database ko cần quote => nếu có quote sẽ báo lỗi
  sql> CREATE DATABASE IF NOT EXISTS EMP;
  
@@ -17,9 +17,12 @@ mysql> use databaseName;
 
 SQL> DROP DATABASE DATABASE_NAME;
  */
+
+
 public class App1_CreateDatabase {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
-	static final String DB_URL = "jdbc:mysql://localhost"; //chưa ch�?n DatabaseName
+	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
+	static final String DB_URL = "jdbc:mysql://localhost"; //chưa ch�?n DatabaseName
 	static final String USER = "root"; //root
 	static final String PASS = "123456789"; //123456789
 
@@ -42,7 +45,9 @@ public class App1_CreateDatabase {
 		Statement stmt = null;
 		try{
 
-			Class.forName("com.mysql.jdbc.Driver");
+			String sqlOption = "?autoReconnect=true&useSSL=false";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
 			conn = DriverManager.getConnection(DB_URL,USER, PASS);
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
