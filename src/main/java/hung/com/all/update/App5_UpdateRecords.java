@@ -1,13 +1,14 @@
-package hung.com.testperformance;
+package hung.com.all.update;
 
 import java.sql.*;
 
-public class App6_DeleteAllRecords {
+public class App5_UpdateRecords {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 	// EMP là tên database => xem mục tạo Database 
 	//localhost: là địa chỉ nội bộ
+	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	static final String DB_URL = "jdbc:mysql://localhost/"; //Tomcat và Mysql on the same computer
 	// jdbc:mysql://192.168.15.25:3306/yourdatabase
 	//Make sure there is no firewall blocking the access to port 3306
@@ -17,7 +18,7 @@ public class App6_DeleteAllRecords {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		deleteRecords();
+		updateRecords();
 	}
 	
 	/**
@@ -30,21 +31,23 @@ public class App6_DeleteAllRecords {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void deleteRecords(){
+	private static void updateRecords(){
 		Connection conn = null;
 		Statement stmt = null;
-		String databaseName = "login";
+		String databaseName = "testcreatedb";
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
+			String sqlOption = "?autoReconnect=true&useSSL=false";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			String sql = "DELETE FROM login";
+			String sql = "UPDATE Registration " +
+					"SET age = 30 WHERE id in (100, 101)";
 			int numberRowUpdate = stmt.executeUpdate(sql);
 			
 			System.out.println(sql);
-			System.out.println("number of row was deleted: numberRowUpdate = "+ numberRowUpdate);	
-
+			System.out.println("numberRowUpdate = "+ numberRowUpdate);	
+			
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();

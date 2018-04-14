@@ -1,4 +1,4 @@
-package hung.com.all;
+package hung.com.all.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +19,7 @@ SQL> DROP DATABASE DATABASE_NAME;
  */
 
 
-public class App1_CreateDatabase {
+public class App12_DropDatabase {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	static final String DB_URL = "jdbc:mysql://localhost"; //chưa ch�?n DatabaseName
@@ -82,7 +82,7 @@ public class App1_CreateDatabase {
 	}
 
 	private static void dropDatabase(String databaseName){
-		String sql = "DROP DATABASE IF EXISTSDROP DATABASE IF EXISTS "+ databaseName +";";
+		String sql = "DROP DATABASE IF EXISTS "+ databaseName +";";
 		executeRawSQL(sql);
 	}
 }

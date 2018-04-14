@@ -1,15 +1,15 @@
-package hung.com.other;
+package hung.com.all.select;
 
 import java.sql.*;
 
-public class App10_JDBC {
+public class App43_SelectWhere {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
-	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	// EMP là tên database => xem mục tạo Database 
 	//localhost: là địa chỉ nội bộ
-	static final String DB_URL = "jdbc:mysql://localhost/EMP"; //Tomcat và Mysql on the same computer
+	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
+	static final String DB_URL = "jdbc:mysql://localhost/"; //Tomcat và Mysql on the same computer
 	// jdbc:mysql://192.168.15.25:3306/yourdatabase
 	//Make sure there is no firewall blocking the access to port 3306
 
@@ -18,30 +18,42 @@ public class App10_JDBC {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
+		selectRecords();
+	}
+	
+	/**
+	 * Template to select Records to a Table
+
+	      String sql = "CREATE TABLE REGISTRATION " +
+                   "(id INTEGER not NULL, " +
+                   " first VARCHAR(255), " + 
+                   " last VARCHAR(255), " + 
+                   " age INTEGER, " + 
+                   " PRIMARY KEY ( id ))"; 
+	 */
+	private static void selectRecords(){
+
 		Connection conn = null;
 		Statement stmt = null;
+		String databaseName = "testcreatedb";
 		try{
-			//STEP 2: Register JDBC driver (MySql, Oracle, MS sql….) to class loader
-			Class.forName("com.mysql.jdbc.Driver"); //JDBC kết nối với MySQL connector J api
+			String sqlOption = "?autoReconnect=true&useSSL=false";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
+			stmt = conn.createStatement();
 
-			//STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-			//dùng function này là cách ổn nhất (con nhiều cách khác)
-			conn = DriverManager.getConnection(DB_URL,USER,PASS); //tạo 1 socket kết nối server
-
-			//STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement(); //for static SQL 
-			String sql;
-			sql = "SELECT id, first, last, age FROM Employees";  //static SQL statement
-
-			//rs là cursor trỏ vào row của data trả về
+			// * = ch�?n tất cả các column trong bảng
+			/**
+				SELECT field1, field2,...fieldN table_name1, table_name2...
+				[WHERE condition1 [AND [OR]] condition2.....
+			 */
+			String sql = "SELECT * FROM Registration WHERE (id=200) OR (id=100)";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
 			while(rs.next()){
 				//Retrieve by column name
-				int id  = rs.getInt("id");  // “id” là column name
+				int id  = rs.getInt("id");
 				int age = rs.getInt("age");
 				String first = rs.getString("first");
 				String last = rs.getString("last");
@@ -52,10 +64,9 @@ public class App10_JDBC {
 				System.out.print(", First: " + first);
 				System.out.println(", Last: " + last);
 			}
-			//STEP 6: Clean-up environment
+			
+			
 			rs.close();
-			stmt.close();
-			conn.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -66,9 +77,9 @@ public class App10_JDBC {
 			//finally block used to close resources
 			try{
 				if(stmt!=null)
-					stmt.close();
-			}catch(SQLException se2){
-			}// nothing we can do
+					conn.close();
+			}catch(SQLException se){
+			}// do nothing
 			try{
 				if(conn!=null)
 					conn.close();
@@ -77,7 +88,6 @@ public class App10_JDBC {
 			}//end finally try
 		}//end try
 		System.out.println("Goodbye!");
-	}//end main
-
+	}
 
 }

@@ -1,8 +1,8 @@
-package hung.com.all;
+package hung.com.all.select;
 
 import java.sql.*;
 
-public class App3_InsertRecord {
+public class App46_SelectNest {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,11 +18,11 @@ public class App3_InsertRecord {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		insertRecords();
+		selectRecords();
 	}
 	
 	/**
-	 * Template to insertRecords to a Table:
+	 * Template to select Records to a Table
 
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
@@ -31,48 +31,39 @@ public class App3_InsertRecord {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	/**
-		//ko cần đẩy đủ column, chỉ cần đúng thứ tự tên liệt kê là đc
-		//tên column ko cần quote
-		INSERT INTO TABLE_NAME (column1, column2, column3,...columnN)
-		VALUES (value1, value2, value3,...valueN);
-		
-		//chèn nhiều phần tử một lúc performance sẽ tốt hơn
-		INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
-		VALUES (1, 'Paul', 32, 'California', 20000.00 ), => chú ý kiểu int viết khác kiểu text
-		(2, 'Paul1', 32, 'California1', 20000.00 ),
-		 (3, 'Paul2', 32, 'California2', 20000.00 );
+	private static void selectRecords(){
 
-	 */
-
-	private static void insertRecords(){
 		Connection conn = null;
 		Statement stmt = null;
-
 		String databaseName = "testcreatedb";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
+			
+			// Kết quả trả v�? SELECT bản chất là 1 Table tạm th�?i, vì thế có thể truy vấn Table này băng lệnh SELECT:
+			// lấy 3 kết quả đầu tiên từ 4 kết quả trả v�? là những ngư�?i 25 tuổi.
+			String sql = "SELECT * FROM (SELECT * FROM Registration WHERE age=25) AS abc "+
+										"LIMIT 3 OFFSET 0";   //OFFSET: là vị trí bắt đầu
+			ResultSet rs = stmt.executeQuery(sql);
 
-			String sql = "INSERT INTO Registration " +
-					"VALUES (100, 'Zara', 'Ali', 18)";
-			stmt.executeUpdate(sql);
-			
-			sql = "INSERT INTO Registration " +
-					"VALUES (101, 'Mahnaz', 'Fatma', 25)";
-			stmt.executeUpdate(sql);
-			
-			sql = "INSERT INTO Registration " +
-					"VALUES (102, 'Zaid', 'Khan', 30)";
-			stmt.executeUpdate(sql);
-			
-			sql = "INSERT INTO Registration " +
-					"VALUES(103, 'Sumit', 'Mittal', 28)";
-			stmt.executeUpdate(sql);
-			System.out.println("Inserted records into the table...");
+			//STEP 5: Extract data from result set
+			while(rs.next()){
+				//Retrieve by column name
+				int id  = rs.getInt("id");
+				int age = rs.getInt("age");
+				String first = rs.getString("first");
+				String last = rs.getString("last");
 
+				//Display values
+				System.out.print("ID: " + id);
+				System.out.print(", Age: " + age);
+				System.out.print(", First: " + first);
+				System.out.println(", Last: " + last);
+			}
+
+			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -95,6 +86,5 @@ public class App3_InsertRecord {
 		}//end try
 		System.out.println("Goodbye!");
 	}
-
 
 }

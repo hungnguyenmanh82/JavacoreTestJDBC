@@ -1,8 +1,8 @@
-package hung.com.all;
+package hung.com.all.insert;
 
 import java.sql.*;
 
-public class App6_DeleteRecords {
+public class App36_InsertSelect {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,11 +18,11 @@ public class App6_DeleteRecords {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		deleteRecords();
+		selectRecords();
 	}
 	
 	/**
-	 * Template to update Records to a Table
+	 * Template to select Records to a Table
 
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
@@ -31,7 +31,8 @@ public class App6_DeleteRecords {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void deleteRecords(){
+	private static void selectRecords(){
+
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
@@ -41,12 +42,11 @@ public class App6_DeleteRecords {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			String sql = "DELETE FROM Registration " +
-									"WHERE id = 101";
-			int numberRowUpdate = stmt.executeUpdate(sql);
-			
-			System.out.println(sql);
-			System.out.println("numberRowUpdate = "+ numberRowUpdate);	
+			// copy kết quả từ table này sang table khác
+			String sql = "INSERT INTO newtable (id,first) SELECT id,first FROM registration WHERE id > 500";
+			int count = stmt.executeUpdate(sql);
+
+			System.out.println("count = " + count);
 
 		}catch(SQLException se){
 			//Handle errors for JDBC

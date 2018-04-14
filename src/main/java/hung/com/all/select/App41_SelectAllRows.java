@@ -1,8 +1,8 @@
-package hung.com.all;
+package hung.com.all.select;
 
 import java.sql.*;
 
-public class App4_SelectRecords {
+public class App41_SelectAllRows {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -41,8 +41,9 @@ public class App4_SelectRecords {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
-
-			String sql = "SELECT id, first, last, age FROM Registration";
+			
+			// * = ch�?n tất cả các column trong bảng
+			String sql = "SELECT * FROM Registration";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
@@ -59,6 +60,7 @@ public class App4_SelectRecords {
 				System.out.print(", First: " + first);
 				System.out.println(", Last: " + last);
 			}
+
 			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC

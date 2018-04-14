@@ -72,6 +72,7 @@ public class App1_InsertRecord {
 
 			log.debug("start inserting 50k value");
 			
+			//5000 record mất 15s.
 			for(int i = 0; i < 5000; i ++){
 				name = "abc" + String.valueOf(i);
 				email = "hungbeo"+ String.valueOf(i);

@@ -1,12 +1,13 @@
-package hung.com.all;
+package hung.com.all.table;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.mysql.jdbc.DatabaseMetaData;
+
 
 /**
  * Phần này thư�?ng làm trên SQL workbench. Nên ko cần thiết
@@ -20,7 +21,7 @@ mysql> use databaseName;
 
 SQL> DROP DATABASE DATABASE_NAME;
  */
-public class App2_CreateTable {
+public class App21_CreateTable {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
 	static final String DB_URL = "jdbc:mysql://localhost"; //jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	static final String USER = "root"; //root
@@ -34,16 +35,13 @@ public class App2_CreateTable {
 		createDatabase(databaseName);
 
 		//test2: create table on the data base which have just created above
-		String sqlTable = "CREATE TABLE REGISTRATION " +
+		String sqlTable = "CREATE TABLE IF NOT EXISTS registration2 " +
 				"(id INTEGER not NULL, " +
 				" first VARCHAR(255), " + 
 				" last VARCHAR(255), " + 
 				" age INTEGER, " + 
 				" PRIMARY KEY ( id ))";
 		createTable(databaseName, sqlTable);
-		
-        //test3: show all tables in the database
-		showTables(databaseName);
 
 	}
 
@@ -166,66 +164,6 @@ public class App2_CreateTable {
 
 	}
 
-	//SQL> DROP TABLE Employees;
-	private static void dropTable(String databaseName, String tableName){
-		Connection conn = null;
-		Statement stmt = null;
-		try{
 
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
-			stmt = conn.createStatement();
 
-			//create table
-			stmt.executeUpdate("DROP TABLE "+tableName);
-			System.out.println("DROP TABLE "+tableName);
-		}catch(SQLException se){
-			//Handle errors for JDBC
-			se.printStackTrace();
-		}catch(Exception e){
-			//Handle errors for Class.forName
-			e.printStackTrace();
-		}finally{
-			//finally block used to close resources
-			try{
-				if(stmt!=null)
-					stmt.close();
-			}catch(SQLException se){
-			}// do nothing
-			try{
-				if(conn!=null)
-					conn.close();
-			}catch(SQLException se){
-				se.printStackTrace();
-			}//end finally try
-		}//end try
-
-	}
-	
-	private static void showTables(String databaseName){
-		Connection conn = null;
-		Statement stmt = null;
-		try{
-
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName, USER, PASS);
-
-			DatabaseMetaData md = (DatabaseMetaData) conn.getMetaData();
-			//getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) 
-			ResultSet rs = md.getTables(null, null, "%", null);
-			System.out.println(">show tables:");
-			while (rs.next()) {
-				System.out.println(rs.getString(3));
-			}
-
-		}catch(Exception e){
-			System.out.println(e.getStackTrace());
-		}finally{
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}//end try
-	}
 }

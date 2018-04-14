@@ -17,8 +17,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 CREATE SCHEMA IF NOT EXISTS `testcreatedb` DEFAULT CHARACTER SET utf8 ;
 USE `logindb` ;
 
-
-
 USE `testcreatedb` ;
 
 -- -----------------------------------------------------
@@ -33,6 +31,12 @@ CREATE TABLE IF NOT EXISTS `testcreatedb`.`registration` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+
+CREATE DEFINER=`root`@`localhost` 
+PROCEDURE `insertProcedure`(IN in_id int,IN in_first varchar(45),IN in_last varchar(45),IN in_age int)
+BEGIN
+ INSERT INTO registration (id,first,last,age) values (in_id ,in_first,in_last,in_age);
+END
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
