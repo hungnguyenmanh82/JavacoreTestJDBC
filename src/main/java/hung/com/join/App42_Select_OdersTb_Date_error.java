@@ -3,7 +3,7 @@ package hung.com.join;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
-public class App41_Select_OdersTb {
+public class App42_Select_OdersTb_Date_error {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -54,14 +54,16 @@ public class App41_Select_OdersTb {
 				//Retrieve by column name
 				int orderId  = rs.getInt("OrderId");
 				int customerId = rs.getInt("CustomerId");
-				java.sql.Time sqlDate = rs.getTime("OrderDate");
 				
+				//ở JDBC parse String sang các Kiểu DATE, TIME, TIMESTEMP đều sai cả (ko dc dung cach nay)
+//				java.sql.Time sqlDate = rs.getTime("OrderDate"); //cho ket qua sai vì JDBC parser sai
+				java.sql.Date sqlDate = rs.getDate("OrderDate"); //cho ket qua sai vì JDBC parser sai
 				
 				//Display values
 				System.out.print("OrderId: " + orderId);
 				System.out.print(", CustomerId: " + customerId);
 				
-				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime()));
+				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime())); //cho ket qua sai
 				System.out.println(", Date: " + st);
 			}
 			//

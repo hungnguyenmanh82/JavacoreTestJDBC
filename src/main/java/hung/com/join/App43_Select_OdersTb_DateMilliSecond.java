@@ -3,7 +3,7 @@ package hung.com.join;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
-public class App41_Select_OdersTb2 {
+public class App43_Select_OdersTb_DateMilliSecond {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -44,9 +44,17 @@ public class App41_Select_OdersTb2 {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			// * = ch�?n tất cả các column trong bảng
-			
-			String sql = "SELECT * FROM "+ tableName;
+			/**
+				mysql> SELECT UNIX_TIMESTAMP();
+				        -> 1447431666
+				mysql> SELECT UNIX_TIMESTAMP('2015-11-13 10:20:19');
+				        -> 1447431619
+				mysql> SELECT UNIX_TIMESTAMP('2015-11-13 10:20:19.012');
+				        -> 1447431619.012
+			 */
+			//UNIX_TIMESTAMP(OrderDate) = 1523863351.000 second  (chính xác đến millisecond)
+			// seconds since '1970-01-01 00:00:00' UTC)
+			String sql = "SELECT OrderId,CustomerId,UNIX_TIMESTAMP(OrderDate) AS 'date' FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
@@ -54,8 +62,7 @@ public class App41_Select_OdersTb2 {
 				//Retrieve by column name
 				int orderId  = rs.getInt("OrderId");
 				int customerId = rs.getInt("CustomerId");
-				String OrderDate = rs.getString("OrderDate");
-//				java.sql.Date sqlDate = rs.getDate("OrderDate");
+				String OrderDate = rs.getString("date");  
 				
 				
 				//Display values
@@ -63,8 +70,7 @@ public class App41_Select_OdersTb2 {
 				System.out.print(", CustomerId: " + customerId);
 				System.out.println(", OrderDate: " + OrderDate);
 				
-//				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime()));
-//				System.out.println(", Date: " + st);
+
 			}
 			//
 			//============================
