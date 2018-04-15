@@ -1,8 +1,9 @@
-package hung.com.all.select;
+package hung.com.join;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
-public class App43_SelectWhere {
+public class App41_Select_OdersTb {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -35,38 +36,42 @@ public class App43_SelectWhere {
 
 		Connection conn = null;
 		Statement stmt = null;
-		String databaseName = "testcreatedb";
-		String tableName = "Registration";
-		
+		String databaseName = "mydb";
+		String tableName = "orders";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
-
+			
 			// * = ch�?n tất cả các column trong bảng
-			/**
-				SELECT field1, field2,...fieldN table_name1, table_name2...
-				[WHERE condition1 [AND [OR]] condition2.....
-			 */
-			String sql = "SELECT * FROM "+ tableName +" WHERE (id=200) OR (id=100)";
+			
+			String sql = "SELECT * FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
 			while(rs.next()){
 				//Retrieve by column name
-				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
-
+				int orderId  = rs.getInt("OrderId");
+				int customerId = rs.getInt("CustomerId");
+				java.sql.Time sqlDate = rs.getTime("OrderDate");
+				
+				
 				//Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
+				System.out.print("OrderId: " + orderId);
+				System.out.print(", CustomerId: " + customerId);
+				
+				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime()));
+				System.out.println(", Date: " + st);
 			}
-			
+			//
+			//============================
+			String sqlDate1 = "2018-04-22 12:30:45.333";
+			java.util.Date javaDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").parse(sqlDate1);
+			System.out.println(javaDate.toString());
+			//===========================
+			String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(javaDate);
+			System.out.println(st);
 			
 			rs.close();
 		}catch(SQLException se){

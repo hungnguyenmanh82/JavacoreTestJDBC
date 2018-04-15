@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.join;
 
 import java.sql.*;
 
-public class App43_SelectWhere {
+public class App1_Insert_CustomersTb {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,57 +18,45 @@ public class App43_SelectWhere {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		selectRecords();
+		insertRecords();
 	}
 	
 	/**
-	 * Template to select Records to a Table
 
-	      String sql = "CREATE TABLE REGISTRATION " +
-                   "(id INTEGER not NULL, " +
-                   " first VARCHAR(255), " + 
-                   " last VARCHAR(255), " + 
-                   " age INTEGER, " + 
-                   " PRIMARY KEY ( id ))"; 
 	 */
-	private static void selectRecords(){
 
+	private static void insertRecords(){
 		Connection conn = null;
 		Statement stmt = null;
-		String databaseName = "testcreatedb";
-		String tableName = "Registration";
-		
+
+		String databaseName = "mydb";
+		String tableName = "customers";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false";
+			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
+			
+			//============================================== statement (static SQL) ========================
 			stmt = conn.createStatement();
-
-			// * = ch�?n tất cả các column trong bảng
-			/**
-				SELECT field1, field2,...fieldN table_name1, table_name2...
-				[WHERE condition1 [AND [OR]] condition2.....
-			 */
-			String sql = "SELECT * FROM "+ tableName +" WHERE (id=200) OR (id=100)";
-			ResultSet rs = stmt.executeQuery(sql);
-
-			//STEP 5: Extract data from result set
-			while(rs.next()){
-				//Retrieve by column name
-				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
-
-				//Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
 			
 			
-			rs.close();
+			String sql = "INSERT INTO "+ tableName+ " (CustomerName,ContactName,Country) VALUES " +
+												"('Hung beo', 'Contact 1', 'VietName')," +
+												"('Thao Hip', 'Contact 1', 'America')," +
+												"('Truong Giang', 'Contact 2', 'Singapor')," +
+												"('Cuon Cuon', 'Contact 3', 'America')," +
+												"('Chay ve', 'Contact 4', 'Vietnam')," +
+												"('Dong', 'Contact 5', 'America')," +
+												"('Hao Pho', 'Contact 6', 'Thailand')," +
+												"('co chi', 'Contact 7', 'Singapor')," +
+												"('lam quan', 'Contact 8', 'Thailand')," +
+												"('co gan', 'Contact 9', 'Thailand')," +
+												"('lam giau', 'Contact 10', 'Philipine')," +
+												"('ok', 'Contact 6', 'Thailand')," +
+												"('Son Nit', 'Contact 7', 'PhiLipine');";
+			stmt.executeUpdate(sql);
+
+
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -91,5 +79,6 @@ public class App43_SelectWhere {
 		}//end try
 		System.out.println("Goodbye!");
 	}
+
 
 }

@@ -36,15 +36,16 @@ public class App42_SelectSomeColums {
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
+		String tableName = "Registration";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 
-			//chỉ ch�?n 1 vài colums thôi, ko ch�?n tất cả column => performance sẽ tốt hơn
+			//chỉ ch�?n 1 vài colums thôi, ko ch�?n tất cả column => performance sẽ tốt hơn
 			// String sql = "SELECT id, first FROM Registration WHERE age = 18";
-			String sql = "SELECT id, first FROM Registration";
+			String sql = "SELECT id, first FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set

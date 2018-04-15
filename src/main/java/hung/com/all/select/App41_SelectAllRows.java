@@ -36,14 +36,16 @@ public class App41_SelectAllRows {
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
+		String tableName = "Registration";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			// * = ch�?n tất cả các column trong bảng
-			String sql = "SELECT * FROM Registration";
+			// * = ch�?n tất cả các column trong bảng
+			
+			String sql = "SELECT * FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set

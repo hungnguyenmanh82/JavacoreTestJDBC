@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.join;
 
 import java.sql.*;
 
-public class App43_SelectWhere {
+public class App2_Delete_CustomersTb_Constraint {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,57 +18,47 @@ public class App43_SelectWhere {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		selectRecords();
+		deleteRecord();
 	}
 	
 	/**
-	 * Template to select Records to a Table
+	 * https://www.w3schools.com/sql/sql_dates.asp 
+	 * 
+	 * 
+		MySQL 
+		•	DATE - format YYYY-MM-DD
+		•	DATETIME - format: YYYY-MM-DD HH:MI:SS
+		•	TIMESTAMP - format: YYYY-MM-DD HH:MI:SS
+		•	YEAR - format YYYY or YY
+		SQL Server 
+		•	DATE - format YYYY-MM-DD
+		•	DATETIME - format: YYYY-MM-DD HH:MI:SS
+		•	SMALLDATETIME - format: YYYY-MM-DD HH:MI:SS
+		•	TIMESTAMP - format: a unique number
 
-	      String sql = "CREATE TABLE REGISTRATION " +
-                   "(id INTEGER not NULL, " +
-                   " first VARCHAR(255), " + 
-                   " last VARCHAR(255), " + 
-                   " age INTEGER, " + 
-                   " PRIMARY KEY ( id ))"; 
+		SELECT * FROM Orders WHERE OrderDate='2008-11-11'
+
 	 */
-	private static void selectRecords(){
 
+	private static void deleteRecord(){
 		Connection conn = null;
 		Statement stmt = null;
-		String databaseName = "testcreatedb";
-		String tableName = "Registration";
-		
+
+		String databaseName = "mydb";
+		String tableName = "customers";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false";
+			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
+			
+			//============================================== statement (static SQL) ========================
 			stmt = conn.createStatement();
-
-			// * = ch�?n tất cả các column trong bảng
-			/**
-				SELECT field1, field2,...fieldN table_name1, table_name2...
-				[WHERE condition1 [AND [OR]] condition2.....
-			 */
-			String sql = "SELECT * FROM "+ tableName +" WHERE (id=200) OR (id=100)";
-			ResultSet rs = stmt.executeQuery(sql);
-
-			//STEP 5: Extract data from result set
-			while(rs.next()){
-				//Retrieve by column name
-				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
-
-				//Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
 			
-			
-			rs.close();
+			//lưu ý CONSTRAINT FOREIGN key có thể làm insert fail chỗ này vì CustomerId đang đc dung ở Orders table
+			String sql = "DELETE FROM "+ tableName+ " WHERE CustomerId = 9";
+			stmt.executeUpdate(sql);
+
+
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -91,5 +81,6 @@ public class App43_SelectWhere {
 		}//end try
 		System.out.println("Goodbye!");
 	}
+
 
 }
