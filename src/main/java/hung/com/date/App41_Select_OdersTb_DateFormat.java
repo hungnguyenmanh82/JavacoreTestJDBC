@@ -1,4 +1,4 @@
-package hung.com.join;
+package hung.com.date;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -65,14 +65,14 @@ public class App41_Select_OdersTb_DateFormat {
 //				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime()));
 //				System.out.println(", Date: " + st);
 			}
-			//
+/*			//
 			//============================
 			String sqlDate1 = "2018-04-22 12:30:45.333";
 			java.util.Date javaDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").parse(sqlDate1);
 			System.out.println(javaDate.toString());
 			//===========================
 			String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(javaDate);
-			System.out.println(st);
+			System.out.println(st);*/
 			
 			rs.close();
 		}catch(SQLException se){

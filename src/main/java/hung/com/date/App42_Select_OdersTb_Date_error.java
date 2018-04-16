@@ -1,9 +1,9 @@
-package hung.com.join;
+package hung.com.date;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
-public class App43_Select_OdersTb_DateMilliSecond {
+public class App42_Select_OdersTb_Date_error {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -44,17 +44,9 @@ public class App43_Select_OdersTb_DateMilliSecond {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			/**
-				mysql> SELECT UNIX_TIMESTAMP();
-				        -> 1447431666
-				mysql> SELECT UNIX_TIMESTAMP('2015-11-13 10:20:19');
-				        -> 1447431619
-				mysql> SELECT UNIX_TIMESTAMP('2015-11-13 10:20:19.012');
-				        -> 1447431619.012
-			 */
-			//UNIX_TIMESTAMP(OrderDate) = 1523863351.000 second  (chính xác đến millisecond)
-			// seconds since '1970-01-01 00:00:00' UTC)
-			String sql = "SELECT OrderId,CustomerId,UNIX_TIMESTAMP(OrderDate) AS 'date' FROM "+ tableName;
+			// * = ch�?n tất cả các column trong bảng
+			
+			String sql = "SELECT * FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
@@ -62,15 +54,17 @@ public class App43_Select_OdersTb_DateMilliSecond {
 				//Retrieve by column name
 				int orderId  = rs.getInt("OrderId");
 				int customerId = rs.getInt("CustomerId");
-				String OrderDate = rs.getString("date");  
 				
+				//ở JDBC parse String sang các Kiểu DATE, TIME, TIMESTEMP đ�?u sai cả (ko dc dung cach nay)
+//				java.sql.Time sqlDate = rs.getTime("OrderDate"); //cho ket qua sai vì JDBC parser sai
+				java.sql.Date sqlDate = rs.getDate("OrderDate"); //cho ket qua sai vì JDBC parser sai
 				
 				//Display values
 				System.out.print("OrderId: " + orderId);
 				System.out.print(", CustomerId: " + customerId);
-				System.out.println(", OrderDate: " + OrderDate);
 				
-
+				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime())); //cho ket qua sai
+				System.out.println(", Date: " + st);
 			}
 			//
 			//============================

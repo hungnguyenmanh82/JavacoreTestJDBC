@@ -1,9 +1,8 @@
-package hung.com.join;
+package hung.com.all.json;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 
-public class App41_Select_OdersTb_DateString {
+public class App92_JsonObject_Concat {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -36,45 +35,28 @@ public class App41_Select_OdersTb_DateString {
 
 		Connection conn = null;
 		Statement stmt = null;
-		String databaseName = "mydb";
-		String tableName = "orders";
+		String databaseName = "testcreatedb";
+		String tableName = "Registration";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			// * = ch�?n tất cả các column trong bảng
-			
-			String sql = "SELECT * FROM "+ tableName;
+		
+			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('id',id,'first',first,'last',last,'age',age)), ']') AS 'json'  FROM "+ tableName + " WHERE id=600";
 			ResultSet rs = stmt.executeQuery(sql);
 
+			
 			//STEP 5: Extract data from result set
 			while(rs.next()){
-				//Retrieve by column name
-				int orderId  = rs.getInt("OrderId");
-				int customerId = rs.getInt("CustomerId");
-				String OrderDate = rs.getString("OrderDate");  
-//				java.sql.Date sqlDate = rs.getDate("OrderDate");
-				
-				
-				//Display values
-				System.out.print("OrderId: " + orderId);
-				System.out.print(", CustomerId: " + customerId);
-				System.out.println(", OrderDate: " + OrderDate);
-				
-//				String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new java.util.Date(sqlDate.getTime()));
-//				System.out.println(", Date: " + st);
+				String json = rs.getString("json");
+				if(json == null){
+					System.out.println(" not found value");
+				}
+				System.out.println(json);
 			}
-			//
-			//============================
-			String sqlDate1 = "2018-04-22 12:30:45.333";
-			java.util.Date javaDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").parse(sqlDate1);
-			System.out.println(javaDate.toString());
-			//===========================
-			String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(javaDate);
-			System.out.println(st);
-			
+
 			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC

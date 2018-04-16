@@ -1,4 +1,4 @@
-package hung.com.all.functions;
+package hung.com.date;
 
 import java.text.SimpleDateFormat;
 

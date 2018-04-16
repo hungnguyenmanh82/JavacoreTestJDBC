@@ -1,9 +1,8 @@
-package hung.com.join;
+package hung.com.date;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 
-public class App1_Insert_Date {
+public class App2_Delete_CustomersTb_Constraint {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -19,9 +18,9 @@ public class App1_Insert_Date {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		insertRecords();
+		deleteRecord();
 	}
-
+	
 	/**
 	 * https://www.w3schools.com/sql/sql_dates.asp 
 	 * 
@@ -41,41 +40,24 @@ public class App1_Insert_Date {
 
 	 */
 
-	private static void insertRecords(){
+	private static void deleteRecord(){
 		Connection conn = null;
-		PreparedStatement pstmt = null;
+		Statement stmt = null;
 
 		String databaseName = "mydb";
-		String tableName = "orders";
+		String tableName = "customers";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
-
+			
 			//============================================== statement (static SQL) ========================
+			stmt = conn.createStatement();
 			
+			//lưu ý CONSTRAINT FOREIGN key có thể làm insert fail chỗ này vì CustomerId đang đc dung ở Orders table
+			String sql = "DELETE FROM "+ tableName+ " WHERE CustomerId = 9";
+			stmt.executeUpdate(sql);
 
-			//lưu ý CONSTRAINT FOREIGN key có thể làm insert fail chỗ này vì CustomerId ko ton tai
-			String sql = "INSERT INTO "+ tableName+ " (CustomerId,OrderDate) VALUES (?, ?)";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, 13);
-//			pstmt.setDate(2, new java.sql.Date(new java.util.Date().getTime())); //Server: 2018-04-15 00:00:00
-//			pstmt.setDate(2, new java.sql.Date(java.sql.Date.UTC(2018, 1, 22, 12, 30, 45))); // Server: 2018-04-15 00:00:00
-//			pstmt.setDate(2,st); // don't use this way
-			
-			//============================
-			String stDate = "2018-04-22 12:30:48.234";
-			java.util.Date javaDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").parse(stDate);
-			System.out.println(javaDate.toString());
-			//===========================
-			String st =  new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(javaDate);
-			System.out.println(st);
-			
-			pstmt.setString(2, stDate); //server: 2018-04-22 12:30:45
-			int count = pstmt.executeUpdate(); // should use this way
-			
-			System.out.println("count = "+ count);
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
@@ -86,7 +68,7 @@ public class App1_Insert_Date {
 		}finally{
 			//finally block used to close resources
 			try{
-				if(pstmt!=null)
+				if(stmt!=null)
 					conn.close();
 			}catch(SQLException se){
 			}// do nothing

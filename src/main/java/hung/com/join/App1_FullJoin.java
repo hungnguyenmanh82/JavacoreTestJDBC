@@ -1,8 +1,9 @@
 package hung.com.join;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
-public class App2_Delete_CustomersTb_Constraint {
+public class App1_FullJoin {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,47 +19,55 @@ public class App2_Delete_CustomersTb_Constraint {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		deleteRecord();
+		selectRecords();
 	}
 	
 	/**
-	 * https://www.w3schools.com/sql/sql_dates.asp 
-	 * 
-	 * 
-		MySQL 
-		•	DATE - format YYYY-MM-DD
-		•	DATETIME - format: YYYY-MM-DD HH:MI:SS
-		•	TIMESTAMP - format: YYYY-MM-DD HH:MI:SS
-		•	YEAR - format YYYY or YY
-		SQL Server 
-		•	DATE - format YYYY-MM-DD
-		•	DATETIME - format: YYYY-MM-DD HH:MI:SS
-		•	SMALLDATETIME - format: YYYY-MM-DD HH:MI:SS
-		•	TIMESTAMP - format: a unique number
+	 * Template to select Records to a Table
 
-		SELECT * FROM Orders WHERE OrderDate='2008-11-11'
-
+	      String sql = "CREATE TABLE REGISTRATION " +
+                   "(id INTEGER not NULL, " +
+                   " first VARCHAR(255), " + 
+                   " last VARCHAR(255), " + 
+                   " age INTEGER, " + 
+                   " PRIMARY KEY ( id ))"; 
 	 */
+	private static void selectRecords(){
 
-	private static void deleteRecord(){
 		Connection conn = null;
 		Statement stmt = null;
-
 		String databaseName = "mydb";
-		String tableName = "customers";
+		String tableName = "orders";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
+			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
-			
-			//============================================== statement (static SQL) ========================
 			stmt = conn.createStatement();
 			
-			//lưu ý CONSTRAINT FOREIGN key có thể làm insert fail chỗ này vì CustomerId đang đc dung ở Orders table
-			String sql = "DELETE FROM "+ tableName+ " WHERE CustomerId = 9";
-			stmt.executeUpdate(sql);
+			/**
+					 SELECT * FROM t1
+					LEFT JOIN t2 ON t1.id = t2.id
+					UNION
+					SELECT * FROM t1
+					RIGHT JOIN t2 ON t1.id = t2.id
+			 */
+			String sql = " SELECT Orders.OrderID, Customers.CustomerName AS 'name', DATE_FORMAT(OrderDate,'%d/%m/%Y %H:%i:%s') AS 'date' "+
+					      "FROM Orders "+
+					      "LEFT JOIN Customers ON Orders.CustomerID=Customers.CustomerID " +
+					      "UNION " + 
+					      " SELECT Orders.OrderID, Customers.CustomerName AS 'name', DATE_FORMAT(OrderDate,'%d/%m/%Y %H:%i:%s') AS 'date' "+
+					      "FROM Orders "+
+					      "RIGHT JOIN Customers ON Orders.CustomerID=Customers.CustomerID " ;
 
+			ResultSet rs = stmt.executeQuery(sql);
 
+			System.out.println("OrderID, CustomerName, OrderDate");
+			while(rs.next()){
+				System.out.println(rs.getInt("OrderId") + " | " + rs.getString("name") + " | " +rs.getString("date") );		
+			}
+
+			
+			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -81,6 +90,5 @@ public class App2_Delete_CustomersTb_Constraint {
 		}//end try
 		System.out.println("Goodbye!");
 	}
-
 
 }
