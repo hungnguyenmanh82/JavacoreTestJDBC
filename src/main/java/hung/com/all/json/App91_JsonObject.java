@@ -43,7 +43,7 @@ public class App91_JsonObject {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-		
+			//convert giá trị trả về từ câu lệnh SELECT sang Json luôn
 			String sql = "SELECT JSON_OBJECT('id',id,'first',first,'last',last,'age',age) AS 'json' FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 

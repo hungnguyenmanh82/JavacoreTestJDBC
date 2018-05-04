@@ -43,7 +43,9 @@ public class App92_JsonObject_Concat {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-		
+			//convert giá trị trả về từ câu lệnh SELECT sang Json luôn
+			//CONCAT: là nối 2 string lại thành 1
+			//GROUP_CONCAT: nối 2 string lại ngăn cách giữa 2 string bởi colon
 			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('id',id,'first',first,'last',last,'age',age)), ']') AS 'json'  FROM "+ tableName + " WHERE id=600";
 			ResultSet rs = stmt.executeQuery(sql);
 

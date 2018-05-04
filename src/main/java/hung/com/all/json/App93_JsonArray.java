@@ -43,7 +43,7 @@ public class App93_JsonArray {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-		
+			//convert giá trị trả về từ câu lệnh SELECT sang Json array luôn (giống CSV hơn)
 			String sql = "SELECT JSON_ARRAY(id,first,last,age) AS 'json' FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
