@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.all.CRUD.select;
 
 import java.sql.*;
 
-public class App41_SelectAllRows {
+public class App47_SelectLike {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -36,33 +36,26 @@ public class App41_SelectAllRows {
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
-		String tableName = "Registration";
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
-			
-			// * = ch�?n tất cả các column trong bảng
-			
-			String sql = "SELECT * FROM "+ tableName;
+
+			//ko phân biệt chữ Hoa và chữ Thư�?ng
+//			String sql = "SELECT id, first FROM Registration WHERE first LIKE 'hung%' ";
+//			String sql = "SELECT id, first FROM Registration WHERE first LIKE '%ga%' ";
+			String sql = "SELECT id, first FROM Registration WHERE first LIKE '%gay' ";
 			ResultSet rs = stmt.executeQuery(sql);
 
-			//STEP 5: Extract data from result set
 			while(rs.next()){
-				//Retrieve by column name
 				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
 				String first = rs.getString("first");
-				String last = rs.getString("last");
 
-				//Display values
 				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
+				System.out.println(", first: " + first);
 
+			}
 			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC

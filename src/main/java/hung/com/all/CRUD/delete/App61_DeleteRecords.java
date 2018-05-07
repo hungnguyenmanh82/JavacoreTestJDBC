@@ -1,8 +1,8 @@
-package hung.com.all.insert;
+package hung.com.all.CRUD.delete;
 
 import java.sql.*;
 
-public class App31_Insert_Statement {
+public class App61_DeleteRecords {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,11 +18,12 @@ public class App31_Insert_Statement {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		insertRecords();
+		deleteRecords();
 	}
 	
 	/**
-	 * Template to insertRecords to a Table:	
+	 * Template to update Records to a Table
+
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
                    " first VARCHAR(255), " + 
@@ -30,48 +31,22 @@ public class App31_Insert_Statement {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	/**
-		//ko cần đẩy đủ column, chỉ cần đi�?n value đúng thứ tự column liệt kê là đc
-		//tên column ko cần quote
-		INSERT INTO TABLE_NAME (column1, column2, column3,...columnN)
-		VALUES (value1, value2, value3,...valueN);
-		
-		//chèn nhi�?u phần tử một lúc performance sẽ tốt hơn
-		//tên colum ko can quote và ko phan biet chu hoa va chu thuong
-		INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
-		VALUES (1, 'Paul', 32, 'California', 20000.00 ), => chú ý kiểu int viết khác kiểu text
-		(2, 'Paul1', 32, 'California1', 20000.00 ),
-		 (3, 'Paul2', 32, 'California2', 20000.00 );
-
-	 */
-
-	private static void insertRecords(){
+	private static void deleteRecords(){
 		Connection conn = null;
 		Statement stmt = null;
-
 		String databaseName = "testcreatedb";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
+			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
-			
-			//============================================== statement (static SQL) ========================
 			stmt = conn.createStatement();
-			//cách 1: full columns
-			String sql = "INSERT INTO Registration " +
-					"VALUES (100, 'Zara', 'Ali', 18)";
-			stmt.executeUpdate(sql);
 			
-			// cách 2: nhi�?u value 1 lúc
-			sql = "INSERT INTO Registration (id,first,last,age) VALUES " +
-							"(101, 'Mahnaz', 'Fatma', 25),"+
-							"(102, 'Hung gay', 'nghiem mat', 25),"+
-							"(103, 'hung tron', 'thong nhat', 30),"+
-							"(104, 'hung con', 'manh yeu', 30),"+
-							"(105, 'ky', 'dung manh', 25),"+
-							"(106,'hungbeo','nguyen',18)";
-			stmt.executeUpdate(sql);
-
+			String tableName = "registration";
+			String sql = "DELETE FROM " + tableName + " WHERE id = 101";
+			int numberRowUpdate = stmt.executeUpdate(sql);
+			
+			System.out.println(sql);
+			System.out.println("numberRowUpdate = "+ numberRowUpdate);	
 
 		}catch(SQLException se){
 			//Handle errors for JDBC
@@ -95,6 +70,5 @@ public class App31_Insert_Statement {
 		}//end try
 		System.out.println("Goodbye!");
 	}
-
 
 }

@@ -1,8 +1,8 @@
-package hung.com.all.insert;
+package hung.com.all.CRUD.select;
 
 import java.sql.*;
 
-public class App33_Insert_CallableStatement {
+public class App46_SelectNest {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,11 +18,12 @@ public class App33_Insert_CallableStatement {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		insertRecords();
+		selectRecords();
 	}
 	
 	/**
-	 * Template to insertRecords to a Table:	
+	 * Template to select Records to a Table
+
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
                    " first VARCHAR(255), " + 
@@ -30,40 +31,39 @@ public class App33_Insert_CallableStatement {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	/**
-	 *  //SQL procedure
-	 
-		CREATE DEFINER=`root`@`localhost` 
-		PROCEDURE `insertProcedure`(IN in_id int,IN in_first varchar(45),IN in_last varchar(45),IN in_age int)
-		BEGIN
-		 INSERT INTO registration (id,first,last,age) values (in_id ,in_first,in_last,in_age);
-		END
+	private static void selectRecords(){
 
-	 */
-
-	private static void insertRecords(){
 		Connection conn = null;
-		CallableStatement cstmt=null;
-
+		Statement stmt = null;
 		String databaseName = "testcreatedb";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
+			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
+			stmt = conn.createStatement();
 			
+			// Kết quả trả v�? SELECT bản chất là 1 Table tạm th�?i, vì thế có thể truy vấn Table này băng lệnh SELECT:
+			// lấy 3 kết quả đầu tiên từ 4 kết quả trả v�? là những ngư�?i 25 tuổi.
+			String sql = "SELECT * FROM (SELECT * FROM Registration WHERE age=25) AS abc "+
+										"LIMIT 3 OFFSET 0";   //OFFSET: là vị trí bắt đầu
+			ResultSet rs = stmt.executeQuery(sql);
 
-			//================================================ PrepareStatement (dynamic SQL) ======================
-			//insertProcedure() là Procedure name lưu ở SQL server
-			String SQL = "{call insertProcedure(?, ?, ?, ?)}";
-			cstmt = conn.prepareCall(SQL);//for dynamic SQL statement
-			
-			cstmt.setInt(1, 306);  //id = ? 1st
-			cstmt.setString(2, "ThaoHip"); //first name = ? 2nd
-			cstmt.setString(3, "Nguyen"); //last name = ? 3rd
-			cstmt.setInt(4, 33);   //age = ? 4th
-			
-			cstmt.executeUpdate();
+			//STEP 5: Extract data from result set
+			while(rs.next()){
+				//Retrieve by column name
+				int id  = rs.getInt("id");
+				int age = rs.getInt("age");
+				String first = rs.getString("first");
+				String last = rs.getString("last");
 
+				//Display values
+				System.out.print("ID: " + id);
+				System.out.print(", Age: " + age);
+				System.out.print(", First: " + first);
+				System.out.println(", Last: " + last);
+			}
+
+			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -73,7 +73,7 @@ public class App33_Insert_CallableStatement {
 		}finally{
 			//finally block used to close resources
 			try{
-				if(cstmt!=null)
+				if(stmt!=null)
 					conn.close();
 			}catch(SQLException se){
 			}// do nothing
@@ -86,6 +86,5 @@ public class App33_Insert_CallableStatement {
 		}//end try
 		System.out.println("Goodbye!");
 	}
-
 
 }

@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.all.CRUD.insert;
 
 import java.sql.*;
 
-public class App44_SelectLimit {
+public class App32_Insert_PrepareStatement {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,12 +18,11 @@ public class App44_SelectLimit {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		selectRecords();
+		insertRecords();
 	}
 	
 	/**
-	 * Template to select Records to a Table
-
+	 * Template to insertRecords to a Table:	
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
                    " first VARCHAR(255), " + 
@@ -31,37 +30,31 @@ public class App44_SelectLimit {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void selectRecords(){
 
+
+	private static void insertRecords(){
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
+
 		String databaseName = "testcreatedb";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false";
+			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
-			stmt = conn.createStatement();
 			
-			// * = ch�?n tất cả các column trong bảng
-			String sql = "SELECT * FROM Registration LIMIT 3";
-			ResultSet rs = stmt.executeQuery(sql);
 
-			//STEP 5: Extract data from result set
-			while(rs.next()){
-				//Retrieve by column name
-				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
+			//================================================ PrepareStatement (dynamic SQL) ======================
+			//code này sẽ chuyển thành Procedure trên SQL và cache trên SQL server 
+			String SQL = "INSERT INTO Registration VALUES (?, ?, ?, ?)";//dynamic SQL statment
+			 pstmt = conn.prepareStatement(SQL);//for dynamic SQL statement
+			
+			pstmt.setInt(1, 205);  //id = ? 1st
+			pstmt.setString(2, "HungGay"); //first name = ? 2nd
+			pstmt.setString(3, "Chu The"); //last name = ? 3rd
+			pstmt.setInt(4, 15);   //age = ? 4th
+			
+			pstmt.executeUpdate();
 
-				//Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
-
-			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -71,7 +64,7 @@ public class App44_SelectLimit {
 		}finally{
 			//finally block used to close resources
 			try{
-				if(stmt!=null)
+				if(pstmt!=null)
 					conn.close();
 			}catch(SQLException se){
 			}// do nothing
@@ -84,5 +77,6 @@ public class App44_SelectLimit {
 		}//end try
 		System.out.println("Goodbye!");
 	}
+
 
 }

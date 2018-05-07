@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.all.CRUD.delete;
 
 import java.sql.*;
 
-public class App46_SelectNest {
+public class App62_DeleteAllRows {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,11 +18,11 @@ public class App46_SelectNest {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		selectRecords();
+		deleteRecords();
 	}
 	
 	/**
-	 * Template to select Records to a Table
+	 * Template to update Records to a Table
 
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
@@ -31,8 +31,7 @@ public class App46_SelectNest {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void selectRecords(){
-
+	private static void deleteRecords(){
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
@@ -42,28 +41,14 @@ public class App46_SelectNest {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			// Kết quả trả v�? SELECT bản chất là 1 Table tạm th�?i, vì thế có thể truy vấn Table này băng lệnh SELECT:
-			// lấy 3 kết quả đầu tiên từ 4 kết quả trả v�? là những ngư�?i 25 tuổi.
-			String sql = "SELECT * FROM (SELECT * FROM Registration WHERE age=25) AS abc "+
-										"LIMIT 3 OFFSET 0";   //OFFSET: là vị trí bắt đầu
-			ResultSet rs = stmt.executeQuery(sql);
+			String tableName = "registration";
+//			String tableName = "newtable";
+			String sql = "DELETE FROM " + tableName;
+			int numberRowUpdate = stmt.executeUpdate(sql);
+			
+			System.out.println(sql);
+			System.out.println("numberRowUpdate = "+ numberRowUpdate);	
 
-			//STEP 5: Extract data from result set
-			while(rs.next()){
-				//Retrieve by column name
-				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
-
-				//Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
-
-			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();

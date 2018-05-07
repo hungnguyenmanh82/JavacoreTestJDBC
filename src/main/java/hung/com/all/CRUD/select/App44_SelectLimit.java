@@ -1,8 +1,8 @@
-package hung.com.all.insert;
+package hung.com.all.CRUD.select;
 
 import java.sql.*;
 
-public class App36_InsertSelect {
+public class App44_SelectLimit {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -42,12 +42,26 @@ public class App36_InsertSelect {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			// copy kết quả từ table này sang table khác
-			String sql = "INSERT INTO newtable (id,first) SELECT id,first FROM registration WHERE id > 500";
-			int count = stmt.executeUpdate(sql);
+			// * = ch�?n tất cả các column trong bảng
+			String sql = "SELECT * FROM Registration LIMIT 3";
+			ResultSet rs = stmt.executeQuery(sql);
 
-			System.out.println("count = " + count);
+			//STEP 5: Extract data from result set
+			while(rs.next()){
+				//Retrieve by column name
+				int id  = rs.getInt("id");
+				int age = rs.getInt("age");
+				String first = rs.getString("first");
+				String last = rs.getString("last");
 
+				//Display values
+				System.out.print("ID: " + id);
+				System.out.print(", Age: " + age);
+				System.out.print(", First: " + first);
+				System.out.println(", Last: " + last);
+			}
+
+			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();

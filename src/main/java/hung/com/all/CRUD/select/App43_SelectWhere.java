@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.all.CRUD.select;
 
 import java.sql.*;
 
-public class App45_SelectLimitOffset {
+public class App43_SelectWhere {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -36,14 +36,20 @@ public class App45_SelectLimitOffset {
 		Connection conn = null;
 		Statement stmt = null;
 		String databaseName = "testcreatedb";
+		String tableName = "Registration";
+		
 		try{
 			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
-			
-			// * = ch�?n tất cả các column trong bảng
-			String sql = "SELECT * FROM Registration LIMIT 3 OFFSET 3";
+
+			// * = ch�?n tất cả các column trong bảng
+			/**
+				SELECT field1, field2,...fieldN table_name1, table_name2...
+				[WHERE condition1 [AND [OR]] condition2.....
+			 */
+			String sql = "SELECT * FROM "+ tableName +" WHERE (id=200) OR (id=100)";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
@@ -60,7 +66,8 @@ public class App45_SelectLimitOffset {
 				System.out.print(", First: " + first);
 				System.out.println(", Last: " + last);
 			}
-
+			
+			
 			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC

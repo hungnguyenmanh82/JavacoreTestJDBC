@@ -1,4 +1,4 @@
-package hung.com.all.insert;
+package hung.com.all.CRUD.insert;
 
 import java.sql.*;
 

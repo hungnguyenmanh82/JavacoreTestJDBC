@@ -1,8 +1,13 @@
-package hung.com.all.select;
+package hung.com.all.CRUD.insert;
 
 import java.sql.*;
 
-public class App43_SelectWhere {
+/**
+ * transaction JDBC là gộp nhi�?u lệnh vào làm 1 và gửi đi cung 1 lúc tới SQL server.
+ * Cách thông thư�?ng là gửi 1 lệnh đi và ch�? response v�? rồi gửi lệnh tiếp theo.
+ *
+ */
+public class App34_Insert_Transaction {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,12 +23,11 @@ public class App43_SelectWhere {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		selectRecords();
+		insertRecords();
 	}
 	
 	/**
-	 * Template to select Records to a Table
-
+	 * Template to insertRecords to a Table:	
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
                    " first VARCHAR(255), " + 
@@ -31,47 +35,54 @@ public class App43_SelectWhere {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void selectRecords(){
+	/**
+		//ko cần đẩy đủ column, chỉ cần đi�?n value đúng thứ tự column liệt kê là đc
+		//tên column ko cần quote
+		INSERT INTO TABLE_NAME (column1, column2, column3,...columnN)
+		VALUES (value1, value2, value3,...valueN);
 
+	 */
+
+	private static void insertRecords(){
 		Connection conn = null;
 		Statement stmt = null;
+
 		String databaseName = "testcreatedb";
-		String tableName = "Registration";
-		
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false";
+			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
+			
+			//============================================== statement (static SQL) ========================
 			stmt = conn.createStatement();
-
-			// * = ch�?n tất cả các column trong bảng
-			/**
-				SELECT field1, field2,...fieldN table_name1, table_name2...
-				[WHERE condition1 [AND [OR]] condition2.....
-			 */
-			String sql = "SELECT * FROM "+ tableName +" WHERE (id=200) OR (id=100)";
-			ResultSet rs = stmt.executeQuery(sql);
-
-			//STEP 5: Extract data from result set
-			while(rs.next()){
-				//Retrieve by column name
-				int id  = rs.getInt("id");
-				int age = rs.getInt("age");
-				String first = rs.getString("first");
-				String last = rs.getString("last");
-
-				//Display values
-				System.out.print("ID: " + id);
-				System.out.print(", Age: " + age);
-				System.out.print(", First: " + first);
-				System.out.println(", Last: " + last);
-			}
 			
+			//bắt đầu 1 transaction.
+			conn.setAutoCommit(false);//giá trị = false => nghĩa là ko commit lệnh lên server ngay
 			
-			rs.close();
+			//cách 1: full columns
+			String sql = "INSERT INTO Registration " +
+					"VALUES (400, 'Zara', 'Ali', 18)";
+			stmt.executeUpdate(sql);  //chỗ này lưu lại mà ko gửi đi vì Autocomit = false
+			
+			// cách 2: nhi�?u value 1 lúc
+			sql = "INSERT INTO Registration (id,first,last,age) VALUES " +
+							"(401, 'Mahnaz', 'Fatma', 25),"+
+							"(402, 'ok', 'conga', 25),"+
+							"(403,'hungbeo','nguyen',18)";
+			stmt.executeUpdate(sql);  //chỗ này lưu lại mà ko gửi đi vì Autocomit = false
+
+			conn.commit();//gửi 1 transaction gồm nhi�?u command
+
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
+			
+			try {
+				conn.rollback(); //lỗi ở 1 command nào đó => rollback lại toàn bộ
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}catch(Exception e){
 			//Handle errors for Class.forName
 			e.printStackTrace();
@@ -91,5 +102,6 @@ public class App43_SelectWhere {
 		}//end try
 		System.out.println("Goodbye!");
 	}
+
 
 }

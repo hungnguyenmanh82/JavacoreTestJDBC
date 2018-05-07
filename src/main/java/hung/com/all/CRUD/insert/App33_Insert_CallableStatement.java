@@ -1,8 +1,8 @@
-package hung.com.all.select;
+package hung.com.all.CRUD.insert;
 
 import java.sql.*;
 
-public class App47_SelectLike {
+public class App33_Insert_CallableStatement {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -18,12 +18,11 @@ public class App47_SelectLike {
 	static final String PASS = "123456789"; //123456789
 
 	public static void main(String[] args) {
-		selectRecords();
+		insertRecords();
 	}
 	
 	/**
-	 * Template to select Records to a Table
-
+	 * Template to insertRecords to a Table:	
 	      String sql = "CREATE TABLE REGISTRATION " +
                    "(id INTEGER not NULL, " +
                    " first VARCHAR(255), " + 
@@ -31,32 +30,40 @@ public class App47_SelectLike {
                    " age INTEGER, " + 
                    " PRIMARY KEY ( id ))"; 
 	 */
-	private static void selectRecords(){
+	/**
+	 *  //SQL procedure
+	 
+		CREATE DEFINER=`root`@`localhost` 
+		PROCEDURE `insertProcedure`(IN in_id int,IN in_first varchar(45),IN in_last varchar(45),IN in_age int)
+		BEGIN
+		 INSERT INTO registration (id,first,last,age) values (in_id ,in_first,in_last,in_age);
+		END
 
+	 */
+
+	private static void insertRecords(){
 		Connection conn = null;
-		Statement stmt = null;
+		CallableStatement cstmt=null;
+
 		String databaseName = "testcreatedb";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false";
+			String sqlOption = "?autoReconnect=true&useSSL=false"; //ko dùng SSL socket để tăng performance lên
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
-			stmt = conn.createStatement();
+			
 
-			//ko phân biệt chữ Hoa và chữ Thường
-//			String sql = "SELECT id, first FROM Registration WHERE first LIKE 'hung%' ";
-//			String sql = "SELECT id, first FROM Registration WHERE first LIKE '%ga%' ";
-			String sql = "SELECT id, first FROM Registration WHERE first LIKE '%gay' ";
-			ResultSet rs = stmt.executeQuery(sql);
+			//================================================ PrepareStatement (dynamic SQL) ======================
+			//insertProcedure() là Procedure name lưu ở SQL server
+			String SQL = "{call insertProcedure(?, ?, ?, ?)}";
+			cstmt = conn.prepareCall(SQL);//for dynamic SQL statement
+			
+			cstmt.setInt(1, 306);  //id = ? 1st
+			cstmt.setString(2, "ThaoHip"); //first name = ? 2nd
+			cstmt.setString(3, "Nguyen"); //last name = ? 3rd
+			cstmt.setInt(4, 33);   //age = ? 4th
+			
+			cstmt.executeUpdate();
 
-			while(rs.next()){
-				int id  = rs.getInt("id");
-				String first = rs.getString("first");
-
-				System.out.print("ID: " + id);
-				System.out.println(", first: " + first);
-
-			}
-			rs.close();
 		}catch(SQLException se){
 			//Handle errors for JDBC
 			se.printStackTrace();
@@ -66,7 +73,7 @@ public class App47_SelectLike {
 		}finally{
 			//finally block used to close resources
 			try{
-				if(stmt!=null)
+				if(cstmt!=null)
 					conn.close();
 			}catch(SQLException se){
 			}// do nothing
@@ -79,5 +86,6 @@ public class App47_SelectLike {
 		}//end try
 		System.out.println("Goodbye!");
 	}
+
 
 }
