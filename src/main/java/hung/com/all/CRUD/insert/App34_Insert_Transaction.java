@@ -3,8 +3,8 @@ package hung.com.all.CRUD.insert;
 import java.sql.*;
 
 /**
- * transaction JDBC là gộp nhi�?u lệnh vào làm 1 và gửi đi cung 1 lúc tới SQL server.
- * Cách thông thư�?ng là gửi 1 lệnh đi và ch�? response v�? rồi gửi lệnh tiếp theo.
+ * transaction JDBC là gộp nhi�?u lệnh vào làm 1 và gửi đi cung 1 lúc tới SQL server.
+ * Cách thông thư�?ng là gửi 1 lệnh đi và ch�? response v�? rồi gửi lệnh tiếp theo.
  *
  */
 public class App34_Insert_Transaction {
@@ -36,7 +36,7 @@ public class App34_Insert_Transaction {
                    " PRIMARY KEY ( id ))"; 
 	 */
 	/**
-		//ko cần đẩy đủ column, chỉ cần đi�?n value đúng thứ tự column liệt kê là đc
+		//ko cần đẩy đủ column, chỉ cần đi�?n value đúng thứ tự column liệt kê là đc
 		//tên column ko cần quote
 		INSERT INTO TABLE_NAME (column1, column2, column3,...columnN)
 		VALUES (value1, value2, value3,...valueN);
@@ -64,14 +64,14 @@ public class App34_Insert_Transaction {
 					"VALUES (400, 'Zara', 'Ali', 18)";
 			stmt.executeUpdate(sql);  //chỗ này lưu lại mà ko gửi đi vì Autocomit = false
 			
-			// cách 2: nhi�?u value 1 lúc
+			// cách 2: nhi�?u value 1 lúc
 			sql = "INSERT INTO Registration (id,first,last,age) VALUES " +
 							"(401, 'Mahnaz', 'Fatma', 25),"+
 							"(402, 'ok', 'conga', 25),"+
 							"(403,'hungbeo','nguyen',18)";
 			stmt.executeUpdate(sql);  //chỗ này lưu lại mà ko gửi đi vì Autocomit = false
 
-			conn.commit();//gửi 1 transaction gồm nhi�?u command
+			conn.commit();//gửi 1 transaction gồm nhiều command
 
 		}catch(SQLException se){
 			//Handle errors for JDBC

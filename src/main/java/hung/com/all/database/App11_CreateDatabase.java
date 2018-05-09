@@ -20,7 +20,7 @@ SQL> DROP DATABASE DATABASE_NAME;
 
 
 public class App11_CreateDatabase {
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
+
 	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
 	static final String DB_URL = "jdbc:mysql://localhost"; //chưa ch�?n DatabaseName
 	static final String USER = "root"; //root
@@ -46,6 +46,7 @@ public class App11_CreateDatabase {
 		try{
 
 			String sqlOption = "?autoReconnect=true&useSSL=false";
+			//với Oracle or SQL server thì class name phải thay đổi
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			conn = DriverManager.getConnection(DB_URL,USER, PASS);
