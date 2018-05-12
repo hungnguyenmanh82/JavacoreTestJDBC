@@ -2,7 +2,7 @@ package hung.com.all.CRUD.insert;
 
 import java.sql.*;
 
-public class App37_Insert_getId {
+public class App37_Insert_getId2 {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -27,7 +27,7 @@ public class App37_Insert_getId {
 
 	private static void insertRecords(){
 		Connection conn = null;
-		PreparedStatement pstmt = null;
+		Statement stmt = null;
 
 		String databaseName = "mydb";
 		String tableName = "customers";
@@ -36,23 +36,18 @@ public class App37_Insert_getId {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 
-			//============================================== get Id after Insert ========================
-
+			//============================================== Insert ========================
+			stmt = conn.createStatement();
 			String sql = "INSERT INTO "+ tableName+ " (CustomerName,ContactName,Country) VALUES " +
-					"(?, ?, ?);";
-			pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);//for dynamic SQL statement
+												"('Meo con 1', 'Contact 33', 'PhiLipine');";
+			stmt.executeUpdate(sql);
+			//============================================== get Id after Insert ========================
+			sql = "SELECT LAST_INSERT_ID();";
+			ResultSet rs = stmt.executeQuery(sql);
 
-			pstmt.setString(1, "Kien beo");  //id = ? 1st
-			pstmt.setString(2, "Contact 22"); //first name = ? 2nd
-			pstmt.setString(3, "HongKong"); //last name = ? 3rd
-
-			//mỗi lần insert ko thành công ID sẽ tự động tăng lên 1
-			int numberUpdate = pstmt.executeUpdate();
-			System.out.println("numberUpdate = " + numberUpdate);
-			
-			ResultSet rs = pstmt.getGeneratedKeys();
-			if (rs.next()){
-				System.out.println("id = " + rs.getLong(1)); //column from 1 (not 0)
+			//STEP 5: Extract data from result set
+			while(rs.next()){
+				System.out.println("id = "+ rs.getLong(1)); //column from 1 (not 0)
 			}
 			
 		}catch(SQLException se){
@@ -64,7 +59,7 @@ public class App37_Insert_getId {
 		}finally{
 			//finally block used to close resources
 			try{
-				if(pstmt!=null)
+				if(stmt!=null)
 					conn.close();
 			}catch(SQLException se){
 			}// do nothing
