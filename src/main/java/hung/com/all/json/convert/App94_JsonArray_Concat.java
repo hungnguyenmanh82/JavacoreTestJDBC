@@ -1,8 +1,8 @@
-package hung.com.all.json;
+package hung.com.all.json.convert;
 
 import java.sql.*;
 
-public class App91_JsonObject {
+public class App94_JsonArray_Concat {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -38,18 +38,22 @@ public class App91_JsonObject {
 		String databaseName = "testcreatedb";
 		String tableName = "Registration";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false";
+			String sqlOption = "?autoReconnect=true&useSSL=false"; 
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-			//convert giá trị trả về từ câu lệnh SELECT sang Json luôn
-			String sql = "SELECT JSON_OBJECT('id',id,'first',first,'last',last,'age',age) AS 'json' FROM "+ tableName;
+		
+//			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_ARRAY(id,first,last,age)), ']') AS 'json'  FROM "+ tableName +" WHERE id=600";
+			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_ARRAY(id,first,last,age)), ']') AS 'json'  FROM "+ tableName;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			//STEP 5: Extract data from result set
 			while(rs.next()){
 				String json = rs.getString("json");
+				if(json == null){
+					System.out.println(" not found value");
+				}
 				System.out.println(json);
 			}
 

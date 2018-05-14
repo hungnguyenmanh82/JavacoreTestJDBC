@@ -1,8 +1,8 @@
-package hung.com.all.json;
+package hung.com.all.json.convert;
 
 import java.sql.*;
 
-public class App94_JsonArray_Concat {
+public class App92_JsonObject_Concat {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; 
@@ -38,16 +38,18 @@ public class App94_JsonArray_Concat {
 		String databaseName = "testcreatedb";
 		String tableName = "Registration";
 		try{
-			String sqlOption = "?autoReconnect=true&useSSL=false"; 
+			String sqlOption = "?autoReconnect=true&useSSL=false";
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+ databaseName+sqlOption, USER, PASS);
 			stmt = conn.createStatement();
 			
-		
-//			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_ARRAY(id,first,last,age)), ']') AS 'json'  FROM "+ tableName +" WHERE id=600";
-			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_ARRAY(id,first,last,age)), ']') AS 'json'  FROM "+ tableName;
+			//convert giá trị trả về từ câu lệnh SELECT sang Json luôn
+			//CONCAT: là nối 2 string lại thành 1
+			//GROUP_CONCAT: nối 2 string lại ngăn cách giữa 2 string bởi colon
+			String sql = "SELECT CONCAT('[', GROUP_CONCAT(JSON_OBJECT('id',id,'first',first,'last',last,'age',age)), ']') AS 'json'  FROM "+ tableName + " WHERE id=600";
 			ResultSet rs = stmt.executeQuery(sql);
 
+			
 			//STEP 5: Extract data from result set
 			while(rs.next()){
 				String json = rs.getString("json");
