@@ -21,7 +21,7 @@ SQL> DROP DATABASE DATABASE_NAME;
 
 public class App12_DropDatabase {
 
-	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
+	//jdbc:mysql://localhost:3306/DatabaseName?autoReconnect=true&useSSL=false
 	static final String DB_URL = "jdbc:mysql://localhost"; //chưa ch�?n DatabaseName
 	static final String USER = "root"; //root
 	static final String PASS = "123456789"; //123456789

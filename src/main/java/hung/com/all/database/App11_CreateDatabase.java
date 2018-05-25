@@ -21,8 +21,8 @@ SQL> DROP DATABASE DATABASE_NAME;
 
 public class App11_CreateDatabase {
 
-	//jdbc:mysql://localhost:3306/TableName?autoReconnect=true&useSSL=false
-	static final String DB_URL = "jdbc:mysql://localhost"; //chưa ch�?n DatabaseName
+	//jdbc:mysql://localhost:3306/DatabaseName?autoReconnect=true&useSSL=false
+	static final String DB_URL = "jdbc:mysql://localhost"; //chưa chọn DatabaseName
 	static final String USER = "root"; //root
 	static final String PASS = "123456789"; //123456789
 
