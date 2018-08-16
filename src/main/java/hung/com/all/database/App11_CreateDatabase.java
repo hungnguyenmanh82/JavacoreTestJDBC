@@ -31,7 +31,7 @@ public class App11_CreateDatabase {
 		String databaseName = "testCreateDB";
 		
 		//test1: create database
-		dropDatabase(databaseName);
+		createDatabase(databaseName);
 
 	}
 
@@ -51,7 +51,12 @@ public class App11_CreateDatabase {
 			
 			conn = DriverManager.getConnection(DB_URL,USER, PASS);
 			stmt = conn.createStatement();
-			stmt.executeUpdate(sql);
+			
+			/**
+			 * hàm này app dùng cho Create, Update, Delete
+			 * @number: là số kết quả đc cập nhật trả về
+			 */
+			int number = stmt.executeUpdate(sql);
 
 			System.out.println("run successfully sql command: "+ sql);
 		}catch(SQLException se){
