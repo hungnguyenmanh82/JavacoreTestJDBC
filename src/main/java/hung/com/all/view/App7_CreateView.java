@@ -2,6 +2,19 @@ package hung.com.all.view;
 
 import java.sql.*;
 
+/**
+ * Là 1 table tạm được tạo ra bởi các table gốc nhờ SELECT.
+Alias table cũng là table tạm chỉ có tác dụng trong 1 truy vấn trên 1 connect (hết truy vấn là bị hủy).
+View là table tạm, có thể phục vụ nhiều truy vấn 1 lúc đc ở nhiều socket connect khác nhau.
+View tự động đc update mỗi lần có lệnh mới truy cập tới nó.
+Tuy nhiên cả View và Alias table đều ko dùng đc INDEX  (khác biệt với Table) => nghĩa là việc tìm kiếm trên view là tuần tự.
+Nếu muốn dùng index ta có thể tạo hẳn Table mới và copy dữ liệu từ SELECT sang để thực hiện truy vấn.
+ Tuy nhiên table này lại ko đc cập nhật khi có dữ liệu mới.
+View và Alias Table có tác dụng như Table nên dùng lệnh SELECT giống hệt table.
+
+Nhưng Select trên View là duyet tuan tu
+ *
+ */
 public class App7_CreateView {
 
 	// JDBC driver name and database URL
