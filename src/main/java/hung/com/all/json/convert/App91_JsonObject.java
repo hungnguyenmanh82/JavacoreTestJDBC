@@ -2,6 +2,11 @@ package hung.com.all.json.convert;
 
 import java.sql.*;
 
+/**
+ * SQL server sẽ trả về Json. 
+ * ở Servlet ko xử lý dữ liệu mà chuyển Json cho Front End xư lý
+ *
+ */
 public class App91_JsonObject {
 
 	// JDBC driver name and database URL
