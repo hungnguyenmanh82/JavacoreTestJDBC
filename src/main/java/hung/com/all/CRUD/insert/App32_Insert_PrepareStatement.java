@@ -53,6 +53,8 @@ public class App32_Insert_PrepareStatement {
 			pstmt.setString(3, "Chu The"); //last name = ? 3rd
 			pstmt.setInt(4, 15);   //age = ? 4th
 			
+			//  https://stackoverflow.com/questions/4355046/java-insert-multiple-rows-into-mysql-with-preparedstatement
+			
 			pstmt.executeUpdate();
 
 		}catch(SQLException se){
